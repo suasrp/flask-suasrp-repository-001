@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spelling Test - {{ letter }}</title>
+</head>
+<body>
+    <h1>Spell the word starting with '{{ letter }}'</h1>
+    <form action="{{ url_for('check_spelling') }}" method="POST">
+        <input type="hidden" name="current_word" value="{{ words[0] }}">
+        <input type="hidden" name="score" value="0">
+        <p>Spell: {{ words[0] }}</p>
+        <input type="text" name="spelling" required>
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{{ url_for('index') }}">Quit Test</a>
+</body>
+</html>
