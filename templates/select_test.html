@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Test</title>
+</head>
+<body>
+    <h1>Select Test</h1>
+    <ul>
+        {% for letter, word_list in tests.items() %}
+            <li><a href="{{ url_for('start_test', letter=letter) }}">Test {{ letter.upper() }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Main Menu</a>
+</body>
+</html>
