@@ -2,3 +2,5 @@ Flask==3.0.3
 gTTS
 playsound
 nltk
+setuptools==60.0.0
+wheel==0.36.0
