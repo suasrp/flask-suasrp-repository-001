@@ -1,5 +1,15 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/templates/index" }
+  "version": 0.1,
+  "builds": [
+    {
+      "src": "./templates/index",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
   ]
 }
