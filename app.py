@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from gtts import gTTS
+from pygame import pygame
 import os
 import nltk
 from nltk.corpus import wordnet
@@ -63,8 +64,13 @@ def pronounce(word):
     filename = f'temp_{word}.mp3'
     tts.save(filename)
 
-    # Serve the file for playback
-    return send_file(filename, mimetype='audio/mpeg')
+    # Initialize pygame mixer
+    pygame.mixer.init()
+    pygame.mixer.music.load(filename)
+    pygame.mixer.music.play()
+
+    while pygame.mixer.music.get_busy():
+        continue  # Wait for the music to finish
     
     os.remove(filename)
     return redirect(url_for('select_test'))
