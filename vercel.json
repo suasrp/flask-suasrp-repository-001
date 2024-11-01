@@ -1,15 +1,15 @@
 {
-  "version": 0.1,
+  "version": 2,
   "builds": [
     {
-      "src": "./templates/index",
+      "src": "./templates/index.html",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "./templates/index.html"
     }
   ]
 }
