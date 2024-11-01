@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from gtts import gTTS
-from playsound import playsound
 import os
 import nltk
 from nltk.corpus import wordnet
@@ -63,7 +62,9 @@ def pronounce(word):
     tts = gTTS(text=word, lang='en')
     filename = f'temp_{word}.mp3'
     tts.save(filename)
-    return send_file(filename, mimetype='audio/mpeg', as_attachment=True)
+
+    # Serve the file for playback
+    return send_file(filename, mimetype='audio/mpeg')
     
     os.remove(filename)
     return redirect(url_for('select_test'))
