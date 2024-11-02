@@ -1,4 +1,6 @@
 Flask==3.0.3
 gTTS==2.5.3
-pygame==2.5.2  # Make sure to specify the latest version
 nltk==3.6.3
+
+# pygame==2.5.2
+# Make sure to specify the latest version
