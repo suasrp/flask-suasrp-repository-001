@@ -10,6 +10,13 @@
             <li><a href="{{ url_for('start_test', letter=letter) }}">Test {{ letter.upper() }}</a></li>
         {% endfor %}
     </ul>
+    {% if request.args.get('audio_file') %}
+        <h2>Pronunciation</h2>
+        <audio controls>
+            <source src="{{ request.args.get('audio_file') }}" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+    {% endif %}
     <a href="{{ url_for('index') }}">Back to Main Menu</a>
 </body>
 </html>
