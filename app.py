@@ -1,17 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from gtts import gTTS
-from pygame import pygame
 import os
 import nltk
-from nltk.corpus import wordnet
 
 nltk.download('wordnet')
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a secure random key
 
+# Predefined list of words
 words = [
-    # Your list of words here...
+    "abbreviate", "abnormality", "abode", "abrasion", "abundantly", "academic",
+    "accessory", "accordion", "acidic", "acne", "acrobat", "adhesive",
+    "admirable", "adoption", "adversary", "affected", "affliction", "affordable",
+    "agenda", "airport", "alimony", "allergic", "alliance", "alpaca",
+    "alphabetical", "amateur", "amplify", "amusing", "animate", "anklebone",
+    "annex", "antibacterial", "antibiotic", "anxiety", "apparition", "appease",
+    "applause", "aptitude", "aquamarine", "arcade", "arrangement", "assortment",
+    "athletic", "attractive", "auditory", "avalanche", "avocado", "badminton",
+    "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette",
+    "visitation", "vitality", "vivid", "vocation", "volcanic", "volume",
+    "waistband", "wallaby", "warehouse", "warrant", "wash-and-wear", "waspish",
+    "wearable", "web-footed", "wharf", "wheelchair", "wherefore", "white blood cell",
+    "whitening", "wireless", "wisecrack", "wittingly", "woozy", "workmanship",
+    "xylophone", "yacht", "yearling", "zealous", "zestfully"
 ]
 
 # Create 26 tests (A-Z)
@@ -64,16 +76,13 @@ def pronounce(word):
     filename = f'temp_{word}.mp3'
     tts.save(filename)
 
-    # Initialize pygame mixer
-    pygame.mixer.init()
-    pygame.mixer.music.load(filename)
-    pygame.mixer.music.play()
+    # Serve the audio file from a temporary location
+    audio_file_url = f'/audio/{filename}'
+    return redirect(url_for('select_test', audio_file=audio_file_url))
 
-    while pygame.mixer.music.get_busy():
-        continue  # Wait for the music to finish
-    
-    os.remove(filename)
-    return redirect(url_for('select_test'))
+@app.route('/audio/<filename>')
+def audio(filename):
+    return send_from_directory(os.getcwd(), filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
