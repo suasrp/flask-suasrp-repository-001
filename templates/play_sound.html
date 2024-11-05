@@ -1,0 +1,17 @@
+# FROM sp_ul_flask_t05d_f 11-05-2024
+#
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Sound</title>
+</head>
+<body>
+    <audio controls autoplay>
+        <source src="{{ url_for('static', filename=filename) }}" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+    <a href="{{ url_for('start_test', letter=request.args.get('letter')) }}">Back to Test</a>
+</body>
+</html>
