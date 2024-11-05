@@ -1,19 +1,21 @@
-# LAST ONE from ORIGINAL flask-suasrp-repository-001 11-05-2024
+# FROM sp_ul_flask_t05d_f 11-05-2024
 #
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Spelling Test - {{ letter }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test {{ letter.upper() }}</title>
 </head>
 <body>
-    <h1>Spell the word starting with '{{ letter }}'</h1>
-    <form action="{{ url_for('check_spelling') }}" method="POST">
-        <input type="hidden" name="current_word" value="{{ words[0] }}">
-        <input type="hidden" name="score" value="0">
-        <p>Spell: {{ words[0] }}</p>
-        <input type="text" name="spelling" required>
+    <h1>Spell the word</h1>
+    <p>{{ current_word }}</p>
+    <form method="post">
+        <input type="text" name="user_input" placeholder="Your answer" required>
+        <input type="hidden" name="correct_word" value="{{ current_word }}">
         <button type="submit">Submit</button>
     </form>
-    <a href="{{ url_for('index') }}">Quit Test</a>
+    <a href="{{ url_for('pronounce', word=current_word) }}">Pronounce</a>
+    <a href="{{ url_for('select_test') }}">Back to Select Test</a>
 </body>
 </html>
