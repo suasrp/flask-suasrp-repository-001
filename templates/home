@@ -1,0 +1,14 @@
+# FROM sp_ul_flask_t05d_f 11-05-2024
+#
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spelling Test</title>
+</head>
+<body>
+    <h1>Spelling Test</h1>
+    <a href="{{ url_for('select_test') }}">Start Test</a>
+</body>
+</html>
