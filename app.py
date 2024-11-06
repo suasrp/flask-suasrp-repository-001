@@ -1,6 +1,7 @@
 # FROM sp_ul_flask_t05d_f 11-05-2024
-#
-from flask import Flask, render_template, request, redirect, url_for, flash
+# Make modifications to keep track of the user's scores, incorrect words, and handle retesting. To track scores and progress, we’ll introduce the following:
+
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from gtts import gTTS
 import random
 
@@ -45,19 +46,69 @@ def select_test():
 
 @app.route('/start_test/<letter>', methods=['GET', 'POST'])
 def start_test(letter):
+    # Initialize or get the session data for the test scores
+    if 'incorrect_words' not in session:
+        session['incorrect_words'] = []
+    if 'correct_words' not in session:
+        session['correct_words'] = 0
+    if 'total_words' not in session:
+        session['total_words'] = len(tests[letter])
+
     if request.method == 'POST':
         # Handle answer submission
         user_input = request.form['user_input'].strip().lower()
         correct_word = request.form['correct_word']
+        
         if user_input == correct_word:
             flash('Correct!', 'success')
+            session['correct_words'] += 1
         else:
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
+            if correct_word not in session['incorrect_words']:
+                session['incorrect_words'].append(correct_word)
+
         return redirect(url_for('start_test', letter=letter))
 
     words_to_test = tests[letter]
     current_word = random.choice(words_to_test)  # Randomly select a word for the test
     return render_template('test.html', letter=letter, current_word=current_word)
+
+@app.route('/retest_incorrect_words', methods=['GET', 'POST'])
+def retest_incorrect_words():
+    if 'incorrect_words' not in session or len(session['incorrect_words']) == 0:
+        flash('No incorrect words to retest!', 'warning')
+        return redirect(url_for('home'))
+
+    if 'retest_score' not in session:
+        session['retest_score'] = 0
+
+    if request.method == 'POST':
+        user_input = request.form['user_input'].strip().lower()
+        correct_word = request.form['correct_word']
+
+        if user_input == correct_word:
+            flash('Correct on retest!', 'success')
+            session['retest_score'] += 1
+            session['incorrect_words'].remove(correct_word)
+        
+        else:
+            flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
+
+        # If all incorrect words have been spelled correctly
+        if len(session['incorrect_words']) == 0:
+            flash('All Words Are Correct!', 'success')
+            # Reset the app for a new test
+            session.pop('incorrect_words', None)
+            session.pop('correct_words', None)
+            session.pop('total_words', None)
+            session['retest_score'] = 0
+            return redirect(url_for('home'))
+
+        return redirect(url_for('retest_incorrect_words'))
+
+    # Show retest words
+    current_word = random.choice(session['incorrect_words'])  # Choose a word from incorrect list
+    return render_template('retest.html', current_word=current_word)
 
 @app.route('/pronounce/<word>')
 def pronounce(word):
