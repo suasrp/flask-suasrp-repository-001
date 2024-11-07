@@ -1,5 +1,9 @@
 # FROM sp_ul_flask_t05d_f 11-05-2024
 # Make modifications to keep track of the user's scores, incorrect words, and handle retesting. To track scores and progress, we’ll introduce the following:
+#Scoring Board (home.html) tracks correct/total words for each test (A-Z).
+#Incorrect Word List is stored in the session, updated as users make mistakes.
+#Retesting resets when all incorrect words are retested successfully.
+#Test Editing (edit_test.html) allows users to add/delete words and tests.
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from gtts import gTTS
@@ -54,11 +58,13 @@ def start_test(letter):
     if 'total_words' not in session:
         session['total_words'] = len(tests[letter])
 
+    # Feature 1: Display Scoring Board
+    score = {"correct": session['correct_words'], "total": session['total_words']}
+
     if request.method == 'POST':
-        # Handle answer submission
         user_input = request.form['user_input'].strip().lower()
         correct_word = request.form['correct_word']
-        
+
         if user_input == correct_word:
             flash('Correct!', 'success')
             session['correct_words'] += 1
@@ -71,7 +77,7 @@ def start_test(letter):
 
     words_to_test = tests[letter]
     current_word = random.choice(words_to_test)  # Randomly select a word for the test
-    return render_template('test.html', letter=letter, current_word=current_word)
+    return render_template('test.html', letter=letter, current_word=current_word, score=score)
 
 @app.route('/retest_incorrect_words', methods=['GET', 'POST'])
 def retest_incorrect_words():
@@ -90,7 +96,7 @@ def retest_incorrect_words():
             flash('Correct on retest!', 'success')
             session['retest_score'] += 1
             session['incorrect_words'].remove(correct_word)
-        
+
         else:
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
 
@@ -120,6 +126,30 @@ def pronounce(word):
 @app.route('/play_sound/<filename>')
 def play_sound(filename):
     return render_template('play_sound.html', filename=filename)
+
+@app.route('/edit_test', methods=['GET', 'POST'])
+def edit_test():
+    if request.method == 'POST':
+        action = request.form['action']
+        letter = request.form['letter']
+
+        if action == 'add_word':
+            new_word = request.form['new_word']
+            if new_word not in tests[letter]:
+                tests[letter].append(new_word)
+
+        elif action == 'delete_word':
+            word_to_delete = request.form['word_to_delete']
+            if word_to_delete in tests[letter]:
+                tests[letter].remove(word_to_delete)
+
+        elif action == 'delete_test':
+            if letter in tests:
+                del tests[letter]
+
+        return redirect(url_for('select_test'))
+
+    return render_template('edit_test.html', tests=tests)
 
 if __name__ == '__main__':
     app.run(debug=True)
