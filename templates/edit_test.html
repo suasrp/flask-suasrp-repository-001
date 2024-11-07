@@ -1,0 +1,37 @@
+#For adding/deleting words or tests
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Test</title>
+</head>
+<body>
+    <h1>Edit Test</h1>
+    <form method="POST">
+        <label for="letter">Choose Test:</label>
+        <select name="letter" required>
+            {% for letter in tests %}
+                <option value="{{ letter }}">{{ letter.upper() }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="action">Action:</label>
+        <select name="action" required>
+            <option value="add_word">Add Word</option>
+            <option value="delete_word">Delete Word</option>
+            <option value="delete_test">Delete Test</option>
+        </select><br>
+
+        <div id="word_action">
+            <label for="new_word">New Word:</label>
+            <input type="text" name="new_word"><br>
+            <label for="word_to_delete">Word to Delete:</label>
+            <input type="text" name="word_to_delete"><br>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
