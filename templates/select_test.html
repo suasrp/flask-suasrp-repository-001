@@ -1,5 +1,6 @@
 # FROM sp_ul_flask_t05d_f 11-05-2024
-#
+#Added a link to edit tests.
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +15,7 @@
             <li><a href="{{ url_for('start_test', letter=letter) }}">Test {{ letter.upper() }}</a></li>
         {% endfor %}
     </ul>
+    <a href="{{ url_for('edit_test') }}">Edit Tests</a><br>
     <a href="{{ url_for('home') }}">Back to Main Menu</a>
 </body>
 </html>
