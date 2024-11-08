@@ -11,7 +11,7 @@
     <h1>Spell the word</h1>
     <p>{{ current_word }}</p>
     <form method="post">
-        <input type="text" name="user_input" placeholder="Your answer" required>
+        <input type="text" name="user_input" placeholder="Your answer" required autofocus>
         <input type="hidden" name="correct_word" value="{{ current_word }}">
         <button type="submit">Submit</button>
     </form>
