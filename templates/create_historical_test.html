@@ -1,0 +1,23 @@
+# This template lets users view and create a test based on historical incorrect words 11-8-2024
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Historical Test</title>
+</head>
+<body>
+    <h1>Create a Historical Test</h1>
+    <p>These are your historically incorrect words:</p>
+    <ul>
+        {% for word in historical_words %}
+            <li>{{ word }}</li>
+        {% endfor %}
+    </ul>
+    <form method="POST">
+        <button type="submit">Create Historical Test</button>
+    </form>
+    <a href="{{ url_for('select_test') }}">Back to Select Test</a>
+</body>
+</html>
