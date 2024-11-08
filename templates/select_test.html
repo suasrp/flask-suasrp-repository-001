@@ -1,5 +1,6 @@
 # FROM sp_ul_flask_t05d_f 11-05-2024
-#
+# Changes in select_test.html 11-8-2024
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +12,10 @@
     <h1>Select Test</h1>
     <ul>
         {% for letter, words in tests.items() %}
-            <li><a href="{{ url_for('start_test', letter=letter) }}">Test {{ letter.upper() }}</a></li>
+            <li>
+                <a href="{{ url_for('start_test', letter=letter) }}">Test {{ letter.upper() }}</a> 
+                (Correct: {{ scoring_board[letter].correct }} / Total: {{ scoring_board[letter].total }})
+            </li>
         {% endfor %}
     </ul>
     <a href="{{ url_for('home') }}">Back to Main Menu</a>
