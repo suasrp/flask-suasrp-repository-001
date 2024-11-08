@@ -1,5 +1,26 @@
 # FROM sp_ul_flask_t05d_f 11-05-2024
 # Make modifications to keep track of the user's scores, incorrect words, and handle retesting. To track scores and progress, we’ll introduce the following:
+# Key Updates:
+#Scoring Board (Feature 1):
+
+#Track the correct/total words for each test in the scoring_board dictionary.
+#Display the scores on the select_test page.
+#Incorrect Words (Feature 2):
+
+#Collect all incorrect words from the tests and store them in session['incorrect_words'].
+#Add incorrectly spelled words to session['historical_incorrect_words'] for later use.
+#Historical Test (Feature 3):
+
+#Create a new "Historical Test" from the historically incorrect words.
+#Display the list of incorrect words and allow the user to create the test.
+#Edit Tests (Feature 5):
+
+#Add functionality for users to add or delete words from the individual tests (A-Z).
+#"All Words Are Correct" Logic (Feature 6 & 7):
+
+#Show the "All Words Are Correct!" message when the user's score reaches the total words in the test.
+#Reset session variables when all words are correct to allow for a fresh start.
+
 
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from gtts import gTTS
@@ -19,6 +40,7 @@ words = [
     "applause", "aptitude", "aquamarine", "arcade", "arrangement", "assortment",
     "athletic", "attractive", "auditory", "avalanche", "avocado", "badminton",
     "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette",
+    "cat", "dog", "eel", "fog", "girl", "hen", "ink", "jam", "king", "log", "mice", "net", "oak", "pin", "quit", "rat", "silk", "tea", "up",
     "visitation", "vitality", "vivid", "vocation", "volcanic", "volume",
     "waistband", "wallaby", "warehouse", "warrant", "wash-and-wear", "waspish",
     "wearable", "web-footed", "wharf", "wheelchair", "wherefore", "white blood cell",
@@ -36,17 +58,20 @@ def create_tests(words_list):
 
 tests = create_tests(words)
 
+# Scoring board to track correct/total words per test
+scoring_board = {letter: {"correct": 0, "total": len(words)} for letter, words in tests.items()}
+
 @app.route('/')
 def home():
     return render_template('home.html')
 
 @app.route('/select_test')
 def select_test():
-    return render_template('select_test.html', tests=tests)
+    return render_template('select_test.html', tests=tests, scoring_board=scoring_board)
 
 @app.route('/start_test/<letter>', methods=['GET', 'POST'])
 def start_test(letter):
-    # Initialize or get the session data for the test scores
+    # Initialize or get session data for the test scores
     if 'incorrect_words' not in session:
         session['incorrect_words'] = []
     if 'correct_words' not in session:
@@ -62,10 +87,14 @@ def start_test(letter):
         if user_input == correct_word:
             flash('Correct!', 'success')
             session['correct_words'] += 1
+            scoring_board[letter]["correct"] += 1  # Update scoring board
         else:
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
             if correct_word not in session['incorrect_words']:
                 session['incorrect_words'].append(correct_word)
+            # Add to global historical incorrect words
+            if correct_word not in session.get('historical_incorrect_words', []):
+                session.setdefault('historical_incorrect_words', []).append(correct_word)
 
         return redirect(url_for('start_test', letter=letter))
 
@@ -120,6 +149,35 @@ def pronounce(word):
 @app.route('/play_sound/<filename>')
 def play_sound(filename):
     return render_template('play_sound.html', filename=filename)
+
+@app.route('/create_historical_test', methods=['GET', 'POST'])
+def create_historical_test():
+    if 'historical_incorrect_words' not in session or len(session['historical_incorrect_words']) == 0:
+        flash('No incorrect words to create a test!', 'warning')
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        # Create a new test based on historical incorrect words
+        historical_test = session['historical_incorrect_words']
+        tests['historical'] = historical_test  # Add new test to the tests dictionary
+        flash('Historical Test Created!', 'success')
+        return redirect(url_for('select_test'))
+
+    return render_template('create_historical_test.html', historical_words=session['historical_incorrect_words'])
+
+@app.route('/edit_test/<letter>', methods=['GET', 'POST'])
+def edit_test(letter):
+    if request.method == 'POST':
+        action = request.form.get('action')
+        word = request.form.get('word').strip().lower()
+        if action == 'add' and word not in tests[letter]:
+            tests[letter].append(word)
+            flash(f'Added {word} to Test {letter.upper()}!', 'success')
+        elif action == 'delete' and word in tests[letter]:
+            tests[letter].remove(word)
+            flash(f'Removed {word} from Test {letter.upper()}!', 'success')
+
+    return render_template('edit_test.html', letter=letter, words=tests[letter])
 
 if __name__ == '__main__':
     app.run(debug=True)
