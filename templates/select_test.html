@@ -10,6 +10,8 @@
 </head>
 <body>
     <h1>Select Test</h1>
+
+    <!-- Display links to each test with current score -->
     <ul>
         {% for letter, words in tests.items() %}
             <li>
@@ -17,11 +19,25 @@
                 (Correct: {{ scoring_board[letter].correct }} / Total: {{ scoring_board[letter].total }})
             </li>
         {% endfor %}
-        
-        {% if session['incorrect_words'] %}
-            <a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
-        {% endif %}
     </ul>
+    
+    <br>
+
+    <!-- Retest link if there are any incorrect words -->
+    {% if session['incorrect_words'] %}
+        <a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
+    {% endif %}
+    
+    <br>
+
+    <!-- Link to create a Historical Test if there are incorrect words -->
+    {% if session['historical_incorrect_words'] %}
+        <a href="{{ url_for('create_historical_test') }}">Create Historical Test</a><br>
+    {% endif %}
+    
+    <br>
+
+    <!-- Link to go back to the main menu -->
     <a href="{{ url_for('home') }}">Back to Main Menu</a>
 </body>
 </html>
