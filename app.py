@@ -70,35 +70,43 @@ def select_test():
 
 @app.route('/start_test/<letter>', methods=['GET', 'POST'])
 def start_test(letter):
-    # Initialize or get session data for the test scores
-    if 'incorrect_words' not in session:
-        session['incorrect_words'] = []
-    if 'correct_words' not in session:
-        session['correct_words'] = 0
-    if 'total_words' not in session:
-        session['total_words'] = len(tests[letter])
+    if 'asked_words' not in session:
+        session['asked_words'] = set()  # Store asked words
 
     if request.method == 'POST':
-        # Handle answer submission
         user_input = request.form['user_input'].strip().lower()
         correct_word = request.form['correct_word']
-        
+
         if user_input == correct_word:
             flash('Correct!', 'success')
             session['correct_words'] += 1
-            scoring_board[letter]["correct"] += 1  # Update scoring board
+            scoring_board[letter]["correct"] += 1
         else:
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
             if correct_word not in session['incorrect_words']:
                 session['incorrect_words'].append(correct_word)
-            # Add to global historical incorrect words
-            if correct_word not in session.get('historical_incorrect_words', []):
-                session.setdefault('historical_incorrect_words', []).append(correct_word)
+
+        # Add the current word to the set of asked words
+        session['asked_words'].add(correct_word)
+
+        # If all words have been asked, show the results
+        if len(session['asked_words']) == len(tests[letter]):
+            flash('Test Completed! Your score is: {} / {}'.format(session['correct_words'], len(tests[letter])), 'success')
+            session.pop('asked_words', None)
+            return redirect(url_for('select_test'))
 
         return redirect(url_for('start_test', letter=letter))
 
     words_to_test = tests[letter]
-    current_word = random.choice(words_to_test)  # Randomly select a word for the test
+    remaining_words = [word for word in words_to_test if word not in session['asked_words']]
+    
+    if remaining_words:
+        current_word = random.choice(remaining_words)
+    else:
+        flash('Test Completed! Your score is: {} / {}'.format(session['correct_words'], len(tests[letter])), 'success')
+        session.pop('asked_words', None)
+        return redirect(url_for('select_test'))
+
     return render_template('test.html', letter=letter, current_word=current_word)
 
 @app.route('/retest_incorrect_words', methods=['GET', 'POST'])
