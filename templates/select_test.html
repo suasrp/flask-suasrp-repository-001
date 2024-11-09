@@ -1,6 +1,3 @@
-# FROM sp_ul_flask_t05d_f 11-05-2024
-# Changes in select_test.html 11-8-2024
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,21 +17,21 @@
             </li>
         {% endfor %}
     </ul>
-    
-    <br>
 
+    <br>
+    
     <!-- Retest link if there are any incorrect words -->
     {% if session['incorrect_words'] %}
         <a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
     {% endif %}
-    
-    <br>
 
+    <br>
+    
     <!-- Link to create a Historical Test if there are incorrect words -->
     {% if session['historical_incorrect_words'] %}
         <a href="{{ url_for('create_historical_test') }}">Create Historical Test</a><br>
     {% endif %}
-    
+
     <br>
 
     <!-- Link to go back to the main menu -->
