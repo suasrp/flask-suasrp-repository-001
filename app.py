@@ -70,19 +70,27 @@ def select_test():
 
 @app.route('/start_test/<letter>', methods=['GET', 'POST'])
 def start_test(letter):
-    # Initialize or get session data for the test scores
+    # Initialize or get session data for the test scores and words asked
     if 'incorrect_words' not in session:
         session['incorrect_words'] = []
     if 'correct_words' not in session:
         session['correct_words'] = 0
     if 'total_words' not in session:
         session['total_words'] = len(tests[letter])
+    if 'asked_words' not in session:
+        session['asked_words'] = []  # Track which words have been asked
 
+    # When the test is submitted, handle the result
     if request.method == 'POST':
         # Handle answer submission
         user_input = request.form['user_input'].strip().lower()
         correct_word = request.form['correct_word']
-        
+
+        # Mark the word as asked
+        if correct_word not in session['asked_words']:
+            session['asked_words'].append(correct_word)
+
+        # Check if the word is correct
         if user_input == correct_word:
             flash('Correct!', 'success')
             session['correct_words'] += 1
@@ -91,15 +99,45 @@ def start_test(letter):
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
             if correct_word not in session['incorrect_words']:
                 session['incorrect_words'].append(correct_word)
-            # Add to global historical incorrect words
-            if correct_word not in session.get('historical_incorrect_words', []):
-                session.setdefault('historical_incorrect_words', []).append(correct_word)
+#                
+############FROM OLDER VERSION
+############Add to global historical incorrect words
+############if correct_word not in session.get('historical_incorrect_words', []):
+################session.setdefault('historical_incorrect_words', []).append(correct_word)
+#
+############return redirect(url_for('start_test', letter=letter))
 
-        return redirect(url_for('start_test', letter=letter))
+#####words_to_test = tests[letter]
+#####current_word = random.choice(words_to_test)  # Randomly select a word for the test
+#####return render_template('test.html', letter=letter, current_word=current_word)
 
-    words_to_test = tests[letter]
-    current_word = random.choice(words_to_test)  # Randomly select a word for the test
+        # If all words have been asked, show the result
+        if len(session['asked_words']) == len(tests[letter]):
+            flash(f'Test Complete! Score: {session["correct_words"]} / {len(tests[letter])}', 'success')
+            # Reset session variables for a fresh start
+            session.pop('asked_words', None)
+            session.pop('incorrect_words', None)
+            session.pop('correct_words', None)
+            session.pop('total_words', None)
+            return redirect(url_for('select_test'))
+
+        # Select a random word that has not been asked yet
+        remaining_words = [word for word in tests[letter] if word not in session['asked_words']]
+        current_word = random.choice(remaining_words) if remaining_words else None
+
+        return render_template('test.html', letter=letter, current_word=current_word)
+
+    # If it's a GET request, select a random word from the test that has not been asked yet
+    remaining_words = [word for word in tests[letter] if word not in session['asked_words']]
+    if remaining_words:
+        current_word = random.choice(remaining_words)
+    else:
+        flash('Test Complete! All words have been asked.', 'success')
+        return redirect(url_for('select_test'))
+
     return render_template('test.html', letter=letter, current_word=current_word)
+#
+#
 
 @app.route('/retest_incorrect_words', methods=['GET', 'POST'])
 def retest_incorrect_words():
