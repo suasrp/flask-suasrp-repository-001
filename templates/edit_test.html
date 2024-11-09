@@ -1,5 +1,3 @@
-#This template allows the user to add or delete words from an individual test
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,17 +7,25 @@
 </head>
 <body>
     <h1>Edit Test {{ letter.upper() }}</h1>
+
+    <h2>Current Words in Test</h2>
     <ul>
         {% for word in words %}
             <li>{{ word }}</li>
         {% endfor %}
     </ul>
+
+    <h2>Add or Remove Words</h2>
     <form method="POST">
         <label for="word">Word:</label>
         <input type="text" name="word" required>
+        
+        <!-- Buttons for adding or deleting a word -->
         <button type="submit" name="action" value="add">Add Word</button>
         <button type="submit" name="action" value="delete">Delete Word</button>
     </form>
+
+    <br>
     <a href="{{ url_for('select_test') }}">Back to Select Test</a>
 </body>
 </html>
