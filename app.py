@@ -105,9 +105,9 @@ def start_test(letter):
 
             return redirect(url_for('start_test', letter=letter))
 
-    words_to_test = tests[letter]
-    current_word = random.choice(words_to_test)  # Randomly select a word for the test
-    return render_template('test.html', letter=letter, current_word=current_word)
+    #words_to_test = tests[letter]
+    #current_word = random.choice(words_to_test)  # Randomly select a word for the test
+    #return render_template('test.html', letter=letter, current_word=current_word)
 #AAA
         # If all words have been asked, show the result
         if len(session['asked_words']) == len(tests[letter]):
