@@ -10,6 +10,7 @@
 <body>
     <h1>Spell the word</h1>
     <p>{{ current_word }}</p>
+    <p>Score: {{ session['correct_words'] }} / {{ session['total_words'] }}</p>
     <form method="post">
         <input type="text" name="user_input" placeholder="Your answer" required autofocus>
         <input type="hidden" name="correct_word" value="{{ current_word }}">
