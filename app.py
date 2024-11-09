@@ -99,15 +99,15 @@ def start_test(letter):
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
             if correct_word not in session['incorrect_words']:
                 session['incorrect_words'].append(correct_word)
-#VVV
+#v
             if correct_word not in session.get('historical_incorrect_words', []):
                 session.setdefault('historical_incorrect_words', []).append(correct_word)
 
             return redirect(url_for('start_test', letter=letter))
 
-     words_to_test = tests[letter]
-     current_word = random.choice(words_to_test)  # Randomly select a word for the test
-     return render_template('test.html', letter=letter, current_word=current_word)
+    words_to_test = tests[letter]
+    current_word = random.choice(words_to_test)  # Randomly select a word for the test
+    return render_template('test.html', letter=letter, current_word=current_word)
 #AAA
         # If all words have been asked, show the result
         if len(session['asked_words']) == len(tests[letter]):
