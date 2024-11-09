@@ -17,6 +17,10 @@
                 (Correct: {{ scoring_board[letter].correct }} / Total: {{ scoring_board[letter].total }})
             </li>
         {% endfor %}
+        
+        {% if session['incorrect_words'] %}
+            <a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
+        {% endif %}
     </ul>
     <a href="{{ url_for('home') }}">Back to Main Menu</a>
 </body>
