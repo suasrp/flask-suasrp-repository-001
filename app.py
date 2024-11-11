@@ -29,48 +29,77 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a random secret key for production
 
 # Predefined list of words
-words = [
-    "abbreviate", "abnormality", "abode", "abrasion", "abundantly", "academic",
+# Example alphabet tests (you can expand this with more words for each letter)
+tests = {
+    "a": ["abbreviate", "abnormality", "abode", "abrasion", "abundantly", "academic",
     "accessory", "accordion", "acidic", "acne", "acrobat", "adhesive",
     "admirable", "adoption", "adversary", "affected", "affliction", "affordable",
     "agenda", "airport", "alimony", "allergic", "alliance", "alpaca",
     "alphabetical", "amateur", "amplify", "amusing", "animate", "anklebone",
     "annex", "antibacterial", "antibiotic", "anxiety", "apparition", "appease",
     "applause", "aptitude", "aquamarine", "arcade", "arrangement", "assortment",
-    "athletic", "attractive", "auditory", "avalanche", "avocado", "badminton",
-    "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette",
-    "cat", "dog", "eel", "fog", "girl", "hen", "ink", "jam", "king", "log", "mice", "net", "oak", "pin", "quit", "rat", "silk", "tea", "up",
-    "visitation", "vitality", "vivid", "vocation", "volcanic", "volume",
-    "waistband", "wallaby", "warehouse", "warrant", "wash-and-wear", "waspish",
+    "athletic", "attractive", "auditory", "avalanche", "avocado"],
+    
+    "b": ["badminton", "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette"],
+    
+    "c": ["cat"],
+    
+    "d": ["dog"],
+    
+    "e": ["eel"],
+    
+    "f": ["fog"],
+    
+    "g": ["girl"],
+    
+    "h": ["hen"],
+    
+    "i": ["ink"],
+    
+    "j": ["jam"],
+    
+    "k": ["king"],
+    
+    "l": ["log"],
+    
+    "m": ["mice"],
+    
+    "n": ["net"],
+    
+    "o": ["oak"],
+    
+    "p": ["pin"],
+    
+    "q": ["quit"],
+    
+    "r": ["rat"],
+    
+    "s": ["silk"],
+    
+    "t": ["tea"],
+    
+    "u": ["up"],
+    
+    "v": ["visitation", "vitality", "vivid", "vocation", "volcanic", "volume"],
+    
+    "w": ["waistband", "wallaby", "warehouse", "warrant", "wash-and-wear", "waspish",
     "wearable", "web-footed", "wharf", "wheelchair", "wherefore", "white blood cell",
-    "whitening", "wireless", "wisecrack", "wittingly", "woozy", "workmanship",
-    "xylophone", "yacht", "yearling", "zealous", "zestfully"
-]
-
-# Create 26 tests (A-Z)
-def create_tests(words_list):
-    tests = {}
-    for letter in 'abcdefghijklmnopqrstuvwxyz':
-        filtered_words = [word for word in words_list if word.startswith(letter)]
-        tests[letter] = filtered_words
-    return tests
-
-tests = create_tests(words)
-
-# Scoring board to track correct/total words per test
-scoring_board = {letter: {"correct": 0, "total": len(words)} for letter, words in tests.items()}
+    "whitening", "wireless", "wisecrack", "wittingly", "woozy", "workmanship"],
+    
+    "x": ["xylophone"],
+    
+    "y": ["yacht", "yearling"],
+    
+    "z": ["zealous", "zestfully]"
+}
 
 @app.route('/')
-def home():
-    return render_template('home.html')
-
-@app.route('/select_test')
 def select_test():
-    return render_template('select_test.html', tests=tests, scoring_board=scoring_board)
+    # Display the list of available tests (one for each letter)
+    return render_template('select_test.html', letters=tests.keys())
 
 @app.route('/start_test/<letter>', methods=['GET', 'POST'])
 def start_test(letter):
-    # Initialize or get session data for the test scores and words asked
     if 'incorrect_words' not in session:
         session['incorrect_words'] = []
     if 'correct_words' not in session:
@@ -80,13 +109,12 @@ def start_test(letter):
     if 'asked_words' not in session:
         session['asked_words'] = []  # Track which words have been asked
 
-    # When the test is submitted, handle the result
+    # If the test is completed, show results and handle retesting logic
     if request.method == 'POST':
-        # Handle answer submission
         user_input = request.form['user_input'].strip().lower()
         correct_word = request.form['correct_word']
 
-        # Mark the word as asked
+        # Track if the word has been asked
         if correct_word not in session['asked_words']:
             session['asked_words'].append(correct_word)
 
@@ -94,30 +122,37 @@ def start_test(letter):
         if user_input == correct_word:
             flash('Correct!', 'success')
             session['correct_words'] += 1
-            scoring_board[letter]["correct"] += 1  # Update scoring board
         else:
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
             if correct_word not in session['incorrect_words']:
                 session['incorrect_words'].append(correct_word)
-#v
-            if correct_word not in session.get('historical_incorrect_words', []):
-                session.setdefault('historical_incorrect_words', []).append(correct_word)
 
-            return redirect(url_for('start_test', letter=letter))
-
-    #words_to_test = tests[letter]
-    #current_word = random.choice(words_to_test)  # Randomly select a word for the test
-    #return render_template('test.html', letter=letter, current_word=current_word)
-#AAA
-        # If all words have been asked, show the result
+        # If all words have been asked, evaluate the results
         if len(session['asked_words']) == len(tests[letter]):
-            flash(f'Test Complete! Score: {session["correct_words"]} / {len(tests[letter])}', 'success')
-            # Reset session variables for a fresh start
-            session.pop('asked_words', None)
-            session.pop('incorrect_words', None)
-            session.pop('correct_words', None)
-            session.pop('total_words', None)
-            return redirect(url_for('select_test'))
+            correct_words_count = session['correct_words']
+            total_words = len(tests[letter])
+            if correct_words_count == total_words:
+                flash('Good Job! All words are correct!', 'success')
+                session.pop('asked_words', None)
+                session.pop('incorrect_words', None)
+                session.pop('correct_words', None)
+                session.pop('total_words', None)
+                return redirect(url_for('select_test'))
+            else:
+                # Handle retesting scenario
+                flash(f'Good Job! {correct_words_count}/{total_words} words are correct. Please complete the retest.', 'warning')
+
+                # Send incorrect words to the retest
+                session['incorrect_for_retest'] = session['incorrect_words']
+
+                # Reset session variables for retest
+                session['correct_words_for_retest'] = 0
+                session['total_words_for_retest'] = len(session['incorrect_for_retest'])
+
+                # Clear asked words for the retest cycle
+                session['asked_words_for_retest'] = []
+
+                return redirect(url_for('start_retest'))
 
         # Select a random word that has not been asked yet
         remaining_words = [word for word in tests[letter] if word not in session['asked_words']]
@@ -125,94 +160,87 @@ def start_test(letter):
 
         return render_template('test.html', letter=letter, current_word=current_word)
 
-    # If it's a GET request, select a random word from the test that has not been asked yet
+    # Initial GET request, show a random word
     remaining_words = [word for word in tests[letter] if word not in session['asked_words']]
-    if remaining_words:
-        current_word = random.choice(remaining_words)
-    else:
-        flash('Test Complete! All words have been asked.', 'success')
-        return redirect(url_for('select_test'))
+    current_word = random.choice(remaining_words) if remaining_words else None
 
     return render_template('test.html', letter=letter, current_word=current_word)
-#
-#
 
-@app.route('/retest_incorrect_words', methods=['GET', 'POST'])
-def retest_incorrect_words():
-    if 'incorrect_words' not in session or len(session['incorrect_words']) == 0:
-        flash('No incorrect words to retest!', 'warning')
-        return redirect(url_for('home'))
+@app.route('/start_retest', methods=['GET', 'POST'])
+def start_retest():
+    if 'incorrect_for_retest' not in session or not session['incorrect_for_retest']:
+        flash('No words to retest. Please start a new test.', 'warning')
+        return redirect(url_for('select_test'))
 
-    if 'retest_score' not in session:
-        session['retest_score'] = 0
+    if 'asked_words_for_retest' not in session:
+        session['asked_words_for_retest'] = []
 
+    # Handle retest form submission
     if request.method == 'POST':
         user_input = request.form['user_input'].strip().lower()
         correct_word = request.form['correct_word']
 
+        # Track if the word has been asked in the retest cycle
+        if correct_word not in session['asked_words_for_retest']:
+            session['asked_words_for_retest'].append(correct_word)
+
+        # Check if the word is correct
         if user_input == correct_word:
-            flash('Correct on retest!', 'success')
-            session['retest_score'] += 1
-            session['incorrect_words'].remove(correct_word)
-        
+            flash('Correct!', 'success')
+            session['correct_words_for_retest'] += 1
         else:
             flash(f'Incorrect. The correct spelling is: {correct_word}', 'danger')
 
-        # If all incorrect words have been spelled correctly
-        if len(session['incorrect_words']) == 0:
-            flash('All Words Are Correct!', 'success')
-            # Reset the app for a new test
-            session.pop('incorrect_words', None)
-            session.pop('correct_words', None)
-            session.pop('total_words', None)
-            session['retest_score'] = 0
-            return redirect(url_for('home'))
+        # Check if all words for retest have been asked
+        if len(session['asked_words_for_retest']) == len(session['incorrect_for_retest']):
+            correct_words_count = session['correct_words_for_retest']
+            total_words = len(session['incorrect_for_retest'])
+            if correct_words_count == total_words:
+                flash('Good Job! All words are correct!', 'success')
+                session.pop('asked_words_for_retest', None)
+                session.pop('incorrect_for_retest', None)
+                session.pop('correct_words_for_retest', None)
+                session.pop('total_words_for_retest', None)
+                return redirect(url_for('select_test'))
+            else:
+                flash(f'Good Job! {correct_words_count}/{total_words} words are correct. Please complete the retest.', 'warning')
 
-        return redirect(url_for('retest_incorrect_words'))
+        # Select a random word for the retest that has not been asked yet
+        remaining_words = [word for word in session['incorrect_for_retest'] if word not in session['asked_words_for_retest']]
+        current_word = random.choice(remaining_words) if remaining_words else None
 
-    # Show retest words
-    current_word = random.choice(session['incorrect_words'])  # Choose a word from incorrect list
+        return render_template('retest.html', current_word=current_word)
+
+    # Initial GET request for retest
+    remaining_words = [word for word in session['incorrect_for_retest'] if word not in session['asked_words_for_retest']]
+    current_word = random.choice(remaining_words) if remaining_words else None
+
     return render_template('retest.html', current_word=current_word)
 
-@app.route('/pronounce/<word>')
-def pronounce(word):
-    tts = gTTS(text=word, lang='en')
-    filename = 'static/temp_word.mp3'
-    tts.save(filename)
-    return redirect(url_for('play_sound', filename='temp_word.mp3'))
+@app.route('/add_misspelled_word', methods=['POST'])
+def add_misspelled_word():
+    word = request.form['misspelled_word']
+    if word not in session.get('historical_misspelled_words', []):
+        session.setdefault('historical_misspelled_words', []).append(word)
+    return redirect(url_for('historical_misspelled_word_list'))
 
-@app.route('/play_sound/<filename>')
-def play_sound(filename):
-    return render_template('play_sound.html', filename=filename)
+@app.route('/delete_misspelled_word/<word>', methods=['GET'])
+def delete_misspelled_word(word):
+    historical_misspelled_words = session.get('historical_misspelled_words', [])
+    if word in historical_misspelled_words:
+        historical_misspelled_words.remove(word)
+        session['historical_misspelled_words'] = historical_misspelled_words
+    return redirect(url_for('historical_misspelled_word_list'))
 
-@app.route('/create_historical_test', methods=['GET', 'POST'])
-def create_historical_test():
-    if 'historical_incorrect_words' not in session or len(session['historical_incorrect_words']) == 0:
-        flash('No incorrect words to create a test!', 'warning')
-        return redirect(url_for('home'))
+@app.route('/historical_misspelled_word_list')
+def historical_misspelled_word_list():
+    historical_misspelled_words = session.get('historical_misspelled_words', [])
+    return render_template('historical_misspelled_word_list.html', historical_misspelled_words=historical_misspelled_words)
 
-    if request.method == 'POST':
-        # Create a new test based on historical incorrect words
-        historical_test = session['historical_incorrect_words']
-        tests['historical'] = historical_test  # Add new test to the tests dictionary
-        flash('Historical Test Created!', 'success')
-        return redirect(url_for('select_test'))
-
-    return render_template('create_historical_test.html', historical_words=session['historical_incorrect_words'])
-
-@app.route('/edit_test/<letter>', methods=['GET', 'POST'])
-def edit_test(letter):
-    if request.method == 'POST':
-        action = request.form.get('action')
-        word = request.form.get('word').strip().lower()
-        if action == 'add' and word not in tests[letter]:
-            tests[letter].append(word)
-            flash(f'Added {word} to Test {letter.upper()}!', 'success')
-        elif action == 'delete' and word in tests[letter]:
-            tests[letter].remove(word)
-            flash(f'Removed {word} from Test {letter.upper()}!', 'success')
-
-    return render_template('edit_test.html', letter=letter, words=tests[letter])
+@app.route('/edit_misspelled_word_list')
+def edit_misspelled_word_list():
+    historical_misspelled_words = session.get('historical_misspelled_words', [])
+    return render_template('edit_misspelled_word_list.html', historical_misspelled_words=historical_misspelled_words)
 
 if __name__ == '__main__':
     app.run(debug=True)
