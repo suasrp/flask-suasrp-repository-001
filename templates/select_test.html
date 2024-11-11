@@ -6,35 +6,46 @@
     <title>Select Test</title>
 </head>
 <body>
-    <h1>Select Test</h1>
-
-    <!-- Display links to each test with current score -->
+    <h1>Select an Alphabet Test</h1>
     <ul>
-        {% for letter, words in tests.items() %}
-            <li>
-                <a href="{{ url_for('start_test', letter=letter) }}">Test {{ letter.upper() }}</a> 
-                (Correct: {{ scoring_board[letter].correct }} / Total: {{ scoring_board[letter].total }})
-            </li>
+        {% for letter in letters %}
+            <li><a href="{{ url_for('start_test', letter=letter) }}">Start Test for {{ letter.upper() }}</a></li>
         {% endfor %}
     </ul>
 
-    <br>
+    <a href="{{ url_for('historical_misspelled_word_list') }}">View Historical Misspelled Words</a>
+
+    ###############################
+    #<h1>Select Test</h1>
+
+    #<!-- Display links to each test with current score -->
+    #<ul>
+        #{% for letter, words in tests.items() %}
+            #<li>
+                #<a href="{{ url_for('start_test', letter=letter) }}">Test {{ letter.upper() }}</a> 
+                #(Correct: {{ scoring_board[letter].correct }} / Total: {{ scoring_board[letter].total }})
+            #</li>
+        #{% endfor %}
+    #</ul>
+
+    #<br>
     
-    <!-- Retest link if there are any incorrect words -->
-    {% if session['incorrect_words'] %}
-        <a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
-    {% endif %}
+    #<!-- Retest link if there are any incorrect words -->
+    #{% if session['incorrect_words'] %}
+        #<a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
+    #{% endif %}
 
-    <br>
+    #<br>
     
-    <!-- Link to create a Historical Test if there are incorrect words -->
-    {% if session['historical_incorrect_words'] %}
-        <a href="{{ url_for('create_historical_test') }}">Create Historical Test</a><br>
-    {% endif %}
+    #<!-- Link to create a Historical Test if there are incorrect words -->
+    #{% if session['historical_incorrect_words'] %}
+        #<a href="{{ url_for('create_historical_test') }}">Create Historical Test</a><br>
+    #{% endif %}
 
-    <br>
+    #<br>
 
-    <!-- Link to go back to the main menu -->
-    <a href="{{ url_for('home') }}">Back to Main Menu</a>
+    #<!-- Link to go back to the main menu -->
+    #<a href="{{ url_for('home') }}">Back to Main Menu</a>
+    #########################################
 </body>
 </html>
