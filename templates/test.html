@@ -6,16 +6,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test {{ letter.upper() }}</title>
+    <title>Test for {{ letter.upper() }}</title>
+    #<title>Test {{ letter.upper() }}</title>
 </head>
 <body>
-    <h1>Spell the word</h1>
+    <h1>Test for {{ letter.upper() }}</h1>
+    #<h1>Spell the word</h1>
 
     {% if current_word %}
-        <p>{{ current_word }}</p>
-        <p>Score: {{ session['correct_words'] }} / {{ session['total_words'] }}</p>
+        <p>Spell the word: {{ current_word }}</p>
+        #<p>{{ current_word }}</p>
+        #<p>Score: {{ session['correct_words'] }} / {{ session['total_words'] }}</p>
 
-        <form method="post">
+        <form method="POST">
             <!-- Automatically focus the cursor on the input box -->
             <input type="text" name="user_input" placeholder="Your answer" required autofocus>
             <input type="hidden" name="correct_word" value="{{ current_word }}">
@@ -38,9 +41,9 @@
     <!-- Link to go back to the Select Test page -->
     <a href="{{ url_for('select_test') }}">Back to Select Test</a>
     
-    <br>
+    #<br>
     
-    <a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a>
+    #<a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a>
     
 </body>
 </html>
