@@ -10,6 +10,7 @@
     <ul>
         {% for letter in letters %}
             <li><a href="{{ url_for('start_test', letter=letter) }}">Start Test for {{ letter.upper() }}</a></li>
+            <li><a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a></li> 
         {% endfor %}
     </ul>
 
