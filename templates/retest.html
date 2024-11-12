@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retest Incorrect Words</title>
+    <title>Retest</title>
 </head>
 <body>
-    <h1>Retest Incorrect Words</h1>
+    <h1>Retest</h1>
 
     {% if current_word %}
-        <p>Spell the word:{{ current_word }}</p>
-        <p>Retest Correct: {{ session['retest_score'] }} / Total Retest: {{ session['total_words'] }}</p>
-    
+        <p>Spell the word: {{ current_word }}</p>
+
         <form method="POST">
-            <input type="text" name="user_input" placeholder="Your answer" required autofocus>
+            <input type="text" name="user_input" placeholder="Your answer" required>
             <input type="hidden" name="correct_word" value="{{ current_word }}">
             <button type="submit">Submit</button>
         </form>
-
     {% else %}
         <p>Retest complete! All words have been answered correctly.</p>
         <a href="{{ url_for('select_test') }}">Back to Select Test</a>
     {% endif %}
-    
-    <a href="{{ url_for('select_test') }}">Back to Select Test</a>
+
+    <a href="{{ url_for('select_test') }}">Go back to Select Test</a>
 </body>
 </html>
