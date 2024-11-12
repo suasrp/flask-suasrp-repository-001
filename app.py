@@ -30,23 +30,13 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a random secret key for production
 
 # Predefined list of words
-words = [
-    "abbreviate", "abnormality", "abode", "abrasion", "abundantly", "academic",
-    "accessory", "accordion", "acidic", "acne", "acrobat", "adhesive",
-    "admirable", "adoption", "adversary", "affected", "affliction", "affordable",
-    "agenda", "airport", "alimony", "allergic", "alliance", "alpaca",
-    "alphabetical", "amateur", "amplify", "amusing", "animate", "anklebone",
-    "annex", "antibacterial", "antibiotic", "anxiety", "apparition", "appease",
-    "applause", "aptitude", "aquamarine", "arcade", "arrangement", "assortment",
-    "athletic", "attractive", "auditory", "avalanche", "avocado", "badminton",
-    "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette",
-    "cat", "dog", "eel", "fog", "girl", "hen", "ink", "jam", "king", "log", "mice", "net", "oak", "pin", "quit", "rat", "silk", "tea", "up",
-    "visitation", "vitality", "vivid", "vocation", "volcanic", "volume",
-    "waistband", "wallaby", "warehouse", "warrant", "wash-and-wear", "waspish",
-    "wearable", "web-footed", "wharf", "wheelchair", "wherefore", "white blood cell",
-    "whitening", "wireless", "wisecrack", "wittingly", "woozy", "workmanship",
-    "xylophone", "yacht", "yearling", "zealous", "zestfully"
-]
+# Example alphabet tests (you can expand this with more words for each letter)
+tests = {
+    'a': ['apple', 'ant', 'apricot'],
+    'b': ['banana', 'ball', 'bird'],
+    'c': ['cat', 'cake', 'car'],
+    # Add more letters and words as needed
+}
 
 # Create 26 tests (A-Z)
 def create_tests(words_list):
