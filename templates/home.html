@@ -6,14 +6,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spelling Test</title>
+    <title>Welcome to the Spelling Test</title>
 </head>
 <body>
-    <h1>Spelling Test</h1>
+    <h1>Welcome to the Alphabet Spelling Test</h1>
+
+    <p>Test your spelling skills by selecting a test for each letter of the alphabet!</p>
+
+    <h2>What would you like to do?</h2>
+    
     <a href="{{ url_for('select_test') }}">Start Test</a><br>
 
-    {% if session['incorrect_words'] %}
-        <a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
-    {% endif %}
+    <ul>
+        <li><a href="{{ url_for('select_test') }}">Select an Alphabet Test</a></li>
+        <li><a href="{{ url_for('historical_misspelled_word_list') }}">View Historical Misspelled Words</a></li>
+        <li><a href="{{ url_for('edit_misspelled_word_list') }}">Edit Historical Misspelled Words</a></li>
+    </ul>
+
+    <footer>
+        <p>Made with ❤️ by Your Team</p>
+    </footer>
+    
+    #{% if session['incorrect_words'] %}
+        #<a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a><br>
+    #{% endif %}
 </body>
 </html>
