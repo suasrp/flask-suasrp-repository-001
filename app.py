@@ -31,7 +31,7 @@ app.secret_key = 'your_secret_key'  # Change this to a random secret key for pro
 
 # Predefined list of words
 # Example alphabet tests (you can expand this with more words for each letter)
-tests = {
+words = {
     'a': ['apple', 'ant', 'apricot'],
     'b': ['banana', 'ball', 'bird'],
     'c': ['cat', 'cake', 'car'],
