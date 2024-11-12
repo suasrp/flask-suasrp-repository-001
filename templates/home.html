@@ -9,18 +9,21 @@
     <title>Welcome to the Spelling Test</title>
 </head>
 <body>
-    <h1>Welcome to the Alphabet Spelling Test</h1>
+    <h1>Welcome to the Charger ⚡ Spelling Test</h1>
 
     <p>Test your spelling skills by selecting a test for each letter of the alphabet!</p>
 
-    <h2>What would you like to do?</h2>
+    <h2>👦What would you like to do?👩</h2>
     
     <ul>
         <li><a href="{{ url_for('select_test') }}">Select an Alphabet Test</a></li>
+        <li><a href="{{ url_for('retest_incorrect_words') }}">Retest Incorrect Words</a></li>     
+        <li><a href="{{ url_for('historical_misspelled_word_list') }}">View Historical Misspelled Words</a></li>
+        <li><a href="{{ url_for('edit_misspelled_word_list') }}">Edit Historical Misspelled Words</a></li>
     </ul>
 
     <footer>
-        <p>Made with ❤️ by Your Team</p>
+        <p>Spelling is fun 👍 Enjoy!</p>
     </footer>
     
     #{% if session['incorrect_words'] %}
