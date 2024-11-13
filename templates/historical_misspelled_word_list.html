@@ -3,23 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historical Misspelled Words</title>
+    <title>Historical Misspelled Word List</title>
 </head>
 <body>
-    <h1>Historical Misspelled Words</h1>
+    <h1>Historical Misspelled Word List</h1>
 
     <ul>
-        {% for word in historical_misspelled_words %}
-            <li>{{ word }} <a href="{{ url_for('delete_misspelled_word', word=word) }}">Delete</a></li>
+        {% for word in words %}
+            <li>{{ word }}</li>
         {% endfor %}
     </ul>
 
-    <h2>Add Misspelled Word</h2>
-    <form action="{{ url_for('add_misspelled_word') }}" method="POST">
-        <input type="text" name="misspelled_word" placeholder="Add a misspelled word" required autofocus>
-        <button type="submit">Add Word</button>
-    </form>
-
-    <a href="{{ url_for('select_test') }}">Back to Select Test</a>
+    <a href="{{ url_for('edit_misspelled_word_list') }}">Edit Word List</a>
+    <a href="{{ url_for('home') }}">Back to Home</a>
 </body>
 </html>
