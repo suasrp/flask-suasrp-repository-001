@@ -12,7 +12,7 @@
 
     <form method="POST">
         <label for="user_input">Spell the word: {{ current_word }}</label>
-        <input type="text" name="user_input" id="user_input" required autofocu>
+        <input type="text" name="user_input" id="user_input" required autofocus>
         <input type="hidden" name="correct_word" value="{{ current_word }}">
         <button type="submit">Submit</button>
     </form>
