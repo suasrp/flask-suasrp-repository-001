@@ -8,19 +8,15 @@
 <body>
     <h1>Test for {{ letter.upper() }}</h1>
 
-    {% if current_word %}
-        <p>Spell the word: {{ current_word }}</p>
+    <p>Current Score: {{ scoring_board[letter]["correct"] }} / {{ scoring_board[letter]["total"] }}</p>
 
-        <form method="POST">
-            <input type="text" name="user_input" placeholder="Your answer" required autofocus>
-            <input type="hidden" name="correct_word" value="{{ current_word }}">
-            <button type="submit">Submit</button>
-        </form>
-    {% else %}
-        <p>Test complete! All words have been asked.</p>
-        <a href="{{ url_for('select_test') }}">Back to Select Test</a>
-    {% endif %}
-    
+    <form method="POST">
+        <label for="user_input">Spell the word: {{ current_word }}</label>
+        <input type="text" name="user_input" id="user_input" required autofocus>
+        <input type="hidden" name="correct_word" value="{{ current_word }}">
+        <button type="submit">Submit</button>
+    </form>
+
     <a href="{{ url_for('select_test') }}">Go back to Select Test</a>
 </body>
 </html>
