@@ -6,7 +6,21 @@
     <title>Test Complete</title>
 </head>
 <body>
-    <h1>{{ message }}</h1>
-    <a href="{{ url_for('select_test') }}">Back to Select Test</a>
+    <h1>Test Complete - {{ letter|upper }} Test</h1>
+
+    <p>{{ message }}</p>
+
+    {% if message.startswith("GOOD JOB!") %}
+        <p>Congratulations! You completed the test successfully.</p>
+    {% else %}
+        <p>You missed some words. Please review them and try again!</p>
+    {% endif %}
+
+    <h2>Final Score: {{ scoring_board[letter]["correct"] }} / {{ scoring_board[letter]["total"] }}</h2>
+
+    <p>
+        <a href="{{ url_for('select_test') }}">Back to Select Test</a>
+        <a href="{{ url_for('retest_incorrect_words') }}">Retest Misspelled Words</a>
+    </p>
 </body>
 </html>
