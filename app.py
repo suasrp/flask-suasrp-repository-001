@@ -65,7 +65,7 @@ ALPHABET_TESTS = {
     
     "y": ["yacht", "yearling"],
     
-    "z": ["zealous", "zestfully]"
+    "z": ["zealous", "zestfully"],
 }
 
 
