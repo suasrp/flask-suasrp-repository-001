@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import random
 
 app = Flask(__name__)
@@ -68,15 +68,26 @@ def start_test(letter):
 
     return render_template('test.html', letter=letter, current_word=current_word, scoring_board=session['scoring_board'])
 
-@app.route('/test_complete/<letter>')
+@app.route('/test_complete/<letter>', methods=['GET'])
 def test_complete(letter):
-    # Reset session for new test
-    session['scoring_board'][letter] = {"correct": 0, "total": len(ALPHABET_TESTS[letter])}
-    session['current_word'] = None
-    # Send incorrect words to historical misspelled word list
-    session['incorrect_words'] = list(set(session['incorrect_words']))  # Remove duplicates
-    session.modified = True
-    return redirect(url_for('select_test'))
+    # Get the current score for the specific alphabet test
+    correct_words = session.get(f"{letter}_correct_words", 0)
+    total_words = session.get(f"{letter}_total_words", 0)
+
+    # Prepare the message
+    if correct_words == total_words:
+        message = "GOOD JOB! All words are correct!"
+    else:
+        message = f"GOOD JOB! {correct_words} out of {total_words} words are correct. Please retake the test for the missed words."
+
+    # Pass the message and score to the template
+    return render_template('test_complete.html', 
+                           letter=letter,
+                           correct_words=correct_words,
+                           total_words=total_words,
+                           message=message)
+
+# Other routes for retest, historical list, etc..
 
 @app.route('/retest_incorrect_words', methods=['GET', 'POST'])
 def retest_incorrect_words():
