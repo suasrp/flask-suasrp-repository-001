@@ -6,7 +6,7 @@ app.secret_key = "your_secret_key"  # Change this to a secret key
 
 # Example data for alphabet test words (you can update it with real data)
 ALPHABET_TESTS = {
-    'a': ['apple', 'ant', 'apricot'],
+    'a': ["apple", "ant", "apricot"],
     'b': ['banana', 'ball', 'bird'],
     'c': ['cat', 'cake', 'car'],
 }
