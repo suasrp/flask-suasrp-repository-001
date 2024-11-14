@@ -6,11 +6,68 @@ app.secret_key = "your_secret_key"  # Change this to a secret key
 
 # Example data for alphabet test words (you can update it with real data)
 ALPHABET_TESTS = {
-    'a': ['apple', 'ant', 'axe', 'arm'],
-    'b': ['banana', 'ball', 'bat', 'boat'],
-    'c': ['cat', 'cap', 'cup', 'car'],
-    # Add more letters and words here
+    "a": ["abbreviate", "abnormality", "abode", "abrasion", "abundantly", "academic",
+    "accessory", "accordion", "acidic", "acne", "acrobat", "adhesive",
+    "admirable", "adoption", "adversary", "affected", "affliction", "affordable",
+    "agenda", "airport", "alimony", "allergic", "alliance", "alpaca",
+    "alphabetical", "amateur", "amplify", "amusing", "animate", "anklebone",
+    "annex", "antibacterial", "antibiotic", "anxiety", "apparition", "appease",
+    "applause", "aptitude", "aquamarine", "arcade", "arrangement", "assortment",
+    "athletic", "attractive", "auditory", "avalanche", "avocado"],
+    
+    "b": ["badminton", "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette"],
+    
+    "c": ["cat"],
+    
+    "d": ["dog"],
+    
+    "e": ["eel"],
+    
+    "f": ["fog"],
+    
+    "g": ["girl"],
+    
+    "h": ["hen"],
+    
+    "i": ["ink"],
+    
+    "j": ["jam"],
+    
+    "k": ["king"],
+    
+    "l": ["log"],
+    
+    "m": ["mice"],
+    
+    "n": ["net"],
+    
+    "o": ["oak"],
+    
+    "p": ["pin"],
+    
+    "q": ["quit"],
+    
+    "r": ["rat"],
+    
+    "s": ["silk"],
+    
+    "t": ["tea"],
+    
+    "u": ["up"],
+    
+    "v": ["visitation", "vitality", "vivid", "vocation", "volcanic", "volume"],
+    
+    "w": ["waistband", "wallaby", "warehouse", "warrant", "wash-and-wear", "waspish",
+    "wearable", "web-footed", "wharf", "wheelchair", "wherefore", "white blood cell",
+    "whitening", "wireless", "wisecrack", "wittingly", "woozy", "workmanship"],
+    
+    "x": ["xylophone"],
+    
+    "y": ["yacht", "yearling"],
+    
+    "z": ["zealous", "zestfully]"
 }
+
 
 # Initialize the session for storing user progress and historical words
 @app.before_request
