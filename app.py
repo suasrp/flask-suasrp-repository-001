@@ -17,52 +17,6 @@ ALPHABET_TESTS = {
     'b': ["badminton", "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette"],
     'c': ['cat', 'cake', 'car'],
     'd': ["dog"],
-
-    'e': ["eel"],
-    
-    'f': ["fog"],
-    
-    'g': ["girl"],
-    
-    'h': ["hen"],
-    
-    'i': ["ink"],
-    
-    'j': ["jam"],
-    
-    'k': ["king"],
-    
-    'l': ["log"],
-    
-    'm': ["mice"],
-    
-    'n': ["net"],
-    
-    'o': ["oak"],
-    
-    'p': ["pin"],
-    
-    'q': ["quit"],
-    
-    'r': ["rat"],
-    
-    's': ["silk"],
-    
-    't': ["tea"],
-    
-    'u': ["up"],
-    
-    'v': ["visitation", "vitality", "vivid", "vocation", "volcanic", "volume"],
-    
-    'w': ["waistband", "wallaby", "warehouse", "warrant", "wash-and-wear", "waspish",
-    "wearable", "web-footed", "wharf", "wheelchair", "wherefore", "white blood cell",
-    "whitening", "wireless", "wisecrack", "wittingly", "woozy", "workmanship"],
-    
-    'x': ["xylophone"],
-    
-    'y': ["yacht", "yearling"],
-    
-    'z': ["zealous", "zestfully"],
 }
 
 
