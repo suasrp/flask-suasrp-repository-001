@@ -14,6 +14,7 @@ ALPHABET_TESTS = {
     "annex", "antibacterial", "antibiotic", "anxiety", "apparition", "appease",
     "applause", "aptitude", "aquamarine", "arcade", "arrangement", "assortment",
     "athletic", "attractive", "auditory", "avalanche", "avocado"],
+    'b': ["badminton", "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette"],
 }
 
 
