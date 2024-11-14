@@ -6,8 +6,15 @@ app.secret_key = "your_secret_key"  # Change this to a secret key
 
 # Example data for alphabet test words (you can update it with real data)
 ALPHABET_TESTS = {
-    'a': ["apple", "ant", "apricot"],
-    'b': ['banana', 'ball', 'bird'],
+    'a': ["abbreviate", "abnormality", "abode", "abrasion", "abundantly", "academic",
+    "accessory", "accordion", "acidic", "acne", "acrobat", "adhesive",
+    "admirable", "adoption", "adversary", "affected", "affliction", "affordable",
+    "agenda", "airport", "alimony", "allergic", "alliance", "alpaca",
+    "alphabetical", "amateur", "amplify", "amusing", "animate", "anklebone",
+    "annex", "antibacterial", "antibiotic", "anxiety", "apparition", "appease",
+    "applause", "aptitude", "aquamarine", "arcade", "arrangement", "assortment",
+    "athletic", "attractive", "auditory", "avalanche", "avocado"],
+    'b': ["badminton", "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette"],
     'c': ['cat', 'cake', 'car'],
 }
 
