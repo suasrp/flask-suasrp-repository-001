@@ -16,6 +16,7 @@ ALPHABET_TESTS = {
     "athletic", "attractive", "auditory", "avalanche", "avocado"],
     'b': ["badminton", "balky", "Ballyhoo", "barbarian", "bareback", "bargain", "barrette"],
     'c': ['cat', 'cake', 'car'],
+     "d": ["dog"],
 }
 
 
